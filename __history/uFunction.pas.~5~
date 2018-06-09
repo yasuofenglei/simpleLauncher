@@ -1,0 +1,32 @@
+unit uFunction;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Winapi.ShellAPI, Vcl.Menus,
+  System.Actions, Vcl.ActnList, System.IniFiles;
+
+procedure DivideData(AList: Tstrings; Value: string; Divide: string);
+
+implementation
+
+procedure DivideData(AList: Tstrings; Value: string; Divide: string);
+var
+  CurrValue:string;
+  leavingsValue:string;
+begin
+  AList.Clear;
+  leavingsValue:=Value;
+  while pos(Divide,value)>0 do
+  begin
+    cu
+
+  end;
+
+
+
+end;
+
+end.
+
