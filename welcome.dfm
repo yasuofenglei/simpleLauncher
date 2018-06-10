@@ -1,9 +1,9 @@
 object FormWelcome: TFormWelcome
   Left = 0
   Top = 0
-  Caption = 'FormWelcome'
-  ClientHeight = 231
-  ClientWidth = 505
+  Caption = 'simpleLauncher'
+  ClientHeight = 403
+  ClientWidth = 703
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -2131,35 +2131,135 @@ object FormWelcome: TFormWelcome
   OnPaint = FormPaint
   PixelsPerInch = 96
   TextHeight = 13
+  object tvConfig: TTreeView
+    Left = 0
+    Top = 0
+    Width = 241
+    Height = 403
+    Align = alLeft
+    Indent = 19
+    PopupMenu = pmtv
+    TabOrder = 0
+    OnChange = tvConfigChange
+    Items.NodeData = {
+      03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      00000000000100}
+  end
+  object pnl1: TPanel
+    Left = 241
+    Top = 0
+    Width = 462
+    Height = 403
+    Align = alClient
+    TabOrder = 1
+    ExplicitTop = 16
+    object btn1: TButton
+      Left = 6
+      Top = 368
+      Width = 75
+      Height = 25
+      Caption = #36733#20837#37197#32622
+      TabOrder = 0
+      OnClick = btn1Click
+    end
+    object btnSaveConfig: TButton
+      Left = 278
+      Top = 368
+      Width = 75
+      Height = 25
+      Caption = #20445#23384#37197#32622
+      TabOrder = 1
+      OnClick = btnSaveConfigClick
+    end
+    object pnlWrite: TPanel
+      Left = 1
+      Top = 1
+      Width = 460
+      Height = 112
+      Align = alTop
+      TabOrder = 2
+      ExplicitWidth = 364
+      object btnConfig: TButton
+        Left = 14
+        Top = 68
+        Width = 100
+        Height = 25
+        Caption = #36873#25321#21487#25191#34892#25991#20214
+        TabOrder = 0
+        OnClick = btnConfigClick
+      end
+      object btn2: TButton
+        Left = 118
+        Top = 68
+        Width = 100
+        Height = 25
+        Caption = #36873#25321#30446#24405
+        TabOrder = 1
+        OnClick = btn2Click
+      end
+      object EdtDir: TEdit
+        Left = 5
+        Top = 20
+        Width = 412
+        Height = 21
+        TabOrder = 2
+        OnChange = EdtDirChange
+      end
+    end
+  end
   object alMain: TActionList
-    Left = 416
-    Top = 32
+    Left = 232
+    Top = 8
     object actExit: TAction
+      Category = 'rightMenu'
       Caption = 'actExit'
       OnExecute = actExitExecute
     end
     object actConfig: TAction
-      Caption = 'actConfig'
+      Category = 'rightMenu'
+      Caption = 'rightMenu'
       OnExecute = actConfigExecute
     end
     object actRefresh: TAction
+      Category = 'rightMenu'
       Caption = 'actRefresh'
       OnExecute = actRefreshExecute
     end
     object actOpen: TAction
+      Category = 'rightMenu'
       Caption = 'actOpen'
       OnExecute = actOpenExecute
+    end
+    object actAdd: TAction
+      Category = 'tvMenu'
+      Caption = 'actAdd'
+      OnExecute = actAddExecute
+    end
+    object actDelete: TAction
+      Category = 'tvMenu'
+      Caption = 'actDelete'
+      OnExecute = actDeleteExecute
+    end
+    object actaddChild: TAction
+      Category = 'tvMenu'
+      Caption = 'actaddChild'
+      OnExecute = actaddChildExecute
+    end
+    object actModify: TAction
+      Category = 'tvMenu'
+      Caption = 'actModify'
+      OnExecute = actModifyExecute
     end
   end
   object pmlm: TPopupMenu
     Images = ilmenu
-    Left = 56
-    Top = 144
+    Left = 40
+    Top = 336
   end
   object pmrm: TPopupMenu
     Images = DataModule1.ilMain
-    Left = 120
-    Top = 152
+    Left = 80
+    Top = 336
     object mniConfig: TMenuItem
       Action = actConfig
       Caption = #37197#32622
@@ -2184,5 +2284,34 @@ object FormWelcome: TFormWelcome
   object ilmenu: TImageList
     Left = 296
     Top = 8
+  end
+  object OpenAdd: TOpenDialog
+    Left = 584
+    Top = 224
+  end
+  object pmtv: TPopupMenu
+    Images = DataModule1.ilMain
+    Left = 56
+    Top = 64
+    object mniAdd: TMenuItem
+      Action = actAdd
+      Caption = #28155#21152#33756#21333
+      ImageIndex = 3
+    end
+    object mniaddChild: TMenuItem
+      Action = actaddChild
+      Caption = #28155#21152#23376#33756#21333
+      ImageIndex = 3
+    end
+    object mniModify: TMenuItem
+      Action = actModify
+      Caption = #20462#25913#33756#21333#21517#31216
+      ImageIndex = 18
+    end
+    object mniDelete: TMenuItem
+      Action = actDelete
+      Caption = #21024#38500
+      ImageIndex = 8
+    end
   end
 end

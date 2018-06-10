@@ -6,14 +6,22 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Winapi.ShellAPI, Vcl.Menus,
   System.Actions, Vcl.ActnList, System.IniFiles, uFunction, System.ImageList,
-  Vcl.ImgList,udata;
+  Vcl.ImgList, udata, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, FileCtrl;
 
 const
   mousemsg = wm_user + 1; //自定义消息，用于处理用户在图标上点击鼠标的事件
   iid = 100;   //用户自定义数值，在TnotifyIconDataA类型全局变量ntida中使用
   CSection: string = 'DIR';
+  IMenueMax: Integer = 1000;
+  menuIdent: string = 'menu';
 
 type
+  PDir = ^RDir;
+
+  RDir = record
+    CDir: string;
+  end;
+
   TFormWelcome = class(TForm)
     alMain: TActionList;
     actExit: TAction;
@@ -27,6 +35,24 @@ type
     mniRefresh: TMenuItem;
     mniOpen: TMenuItem;
     actOpen: TAction;
+    tvConfig: TTreeView;
+    pnl1: TPanel;
+    btn1: TButton;
+    btnSaveConfig: TButton;
+    OpenAdd: TOpenDialog;
+    pnlWrite: TPanel;
+    btnConfig: TButton;
+    btn2: TButton;
+    EdtDir: TEdit;
+    pmtv: TPopupMenu;
+    actAdd: TAction;
+    actDelete: TAction;
+    mniAdd: TMenuItem;
+    mniDelete: TMenuItem;
+    actaddChild: TAction;
+    mniaddChild: TMenuItem;
+    actModify: TAction;
+    mniModify: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormPaint(Sender: TObject);
@@ -34,6 +60,16 @@ type
     procedure actConfigExecute(Sender: TObject);
     procedure actRefreshExecute(Sender: TObject);
     procedure actOpenExecute(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
+    procedure tvConfigChange(Sender: TObject; Node: TTreeNode);
+    procedure btnConfigClick(Sender: TObject);
+    procedure btn2Click(Sender: TObject);
+    procedure btnSaveConfigClick(Sender: TObject);
+    procedure EdtDirChange(Sender: TObject);
+    procedure actAddExecute(Sender: TObject);
+    procedure actDeleteExecute(Sender: TObject);
+    procedure actaddChildExecute(Sender: TObject);
+    procedure actModifyExecute(Sender: TObject);
   private
     FList: TStrings;
     FList2: TStrings;
@@ -47,6 +83,8 @@ type
     function ConfigIni: string;
     //读取配置文件
     function ReadIni: Boolean;
+    //读取配置文件到Treeview
+    function ReadIniToTreeview: Boolean;
     //打开路径菜单
     procedure AOpenDirExecute(Sender: TObject);
     //重写路径
@@ -63,18 +101,55 @@ implementation
 
 {$R *.dfm}
 
+procedure TFormWelcome.actaddChildExecute(Sender: TObject);
+var
+  CName: string;
+  Anode: TTreeNode;
+begin
+  if not inputquery('添加菜单', '请输入菜单名称', CName) then
+    exit;
+  Anode := tvConfig.Items.AddChild(tvconfig.Selected, CName);
+  Anode.Data := New(PDir);
+
+end;
+
+procedure TFormWelcome.actAddExecute(Sender: TObject);
+var
+  CName: string;
+  Anode: TTreeNode;
+begin
+  if not inputquery('添加菜单', '请输入菜单名称', CName) then
+    exit;
+  Anode := tvConfig.Items.Add(nil, CName);
+  Anode.Data := New(PDir);
+end;
+
 procedure TFormWelcome.actConfigExecute(Sender: TObject);
 var
   TXTfileName: string;
 begin
   TXTfileName := Configini;
-  ShellExecute(Handle, 'Open', PChar('notepad.exe'), PChar(TXTfileName), nil, SW_SHOWNORMAL);
-  Exit;
+//  ShellExecute(Handle, 'Open', PChar('notepad.exe'), PChar(TXTfileName), nil, SW_SHOWNORMAL);
+//  Exit;
   //暂未做配置功能.
   ShowWindow(Handle, SW_SHOW);
     //在任务栏上显示应用程序窗口
   ShowWindow(Application.handle, SW_SHOW);
   SetWindowLong(Application.Handle, GWL_EXSTYLE, not (GetWindowLong(Application.handle, GWL_EXSTYLE) or WS_EX_TOOLWINDOW and not WS_EX_APPWINDOW));
+
+end;
+
+procedure TFormWelcome.actDeleteExecute(Sender: TObject);
+var
+  CMsg:string;
+begin
+  Cmsg:='确认要删除['+tvConfig.Selected.Text+']?';
+  if Application.MessageBox(PChar(Cmsg), '', MB_YESNO + MB_ICONQUESTION) = IDNO then
+  begin
+    exit;
+  end;
+
+  tvconfig.Selected.Delete;
 
 end;
 
@@ -93,6 +168,17 @@ begin
   //删除已有的应用程序图标
   Application.Terminate;
 
+end;
+
+procedure TFormWelcome.actModifyExecute(Sender: TObject);
+var
+  Value: string;
+begin
+  Value := tvConfig.Selected.Text;
+  if InputQuery('修改', '请输入修改后的名称', Value) then
+  begin
+    tvConfig.Selected.Text := Value;
+  end;
 end;
 
 procedure TFormWelcome.actOpenExecute(Sender: TObject);
@@ -118,10 +204,31 @@ begin
   ShellExecute(Handle, 'open', 'Explorer.exe', PChar(Dir), nil, 1);
 end;
 
+procedure TFormWelcome.btn1Click(Sender: TObject);
+begin
+  ReadIniToTreeview;
+end;
+
+procedure TFormWelcome.btn2Click(Sender: TObject);
+var
+  Dir: string;
+begin
+  if SelectDirectory('选择目录 ', ' ', Dir) then
+    EdtDir.Text := Dir;
+end;
+
 function TFormWelcome.ConfigIni: string;
 begin
   //path,最后有\,dir最后没有\
   Result := ExtractFilePath(Application.ExeName) + 'config.ini';
+end;
+
+procedure TFormWelcome.EdtDirChange(Sender: TObject);
+begin
+  if tvconfig.Selected.Data <> nil then
+  begin
+    PDir(tvconfig.Selected.Data)^.CDir := EdtDir.Text;
+  end;
 end;
 
 procedure TFormWelcome.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -147,8 +254,8 @@ begin
   ntida.szTip := 'easyLanucher!'; //当鼠标停留在系统状态栏该图标上时，出现该提示信息
   shell_notifyicona(NIM_ADD, @ntida);  //在系统状态栏增加一个新图标
 
-  if not ReadIni then
-    Exit;
+  Readini;
+  ReadiniTotreeview;
 
 end;
 
@@ -210,11 +317,9 @@ var
   S: string;
   AIdent: string;
   ICount: Integer;
-//  LastMenu:string;
   AParentMenu: TMenuItem;
   AItem: TMenuItem;
   IsNewItem: Boolean;
-  SecondItem: TMenuItem;
   ITBCount: integer;
   ITBIndex: integer;
   ICO: TIcon;
@@ -229,12 +334,13 @@ begin
     if not FileExists(AiniFile.FileName) then
     begin
       AERROR := '在' + AiniFile.FileName + '下不存在该文件,请该文件放在该目录下!';
+      ShowMessage(Aerror);
       Exit;
     end;
     //开始读取配置文件
-    for I := 0 to 1000 do
+    for I := 0 to IMenueMax do
     begin
-      AIdent := 'menu' + inttostr(I);
+      AIdent := menuIdent + inttostr(I);
       S := Trim(AiniFile.ReadString(CSection, AIdent, ''));
       if S = '' then
         Continue;
@@ -242,9 +348,8 @@ begin
       DivideData(FList, S, '|');
       ICount := FList.Count;
       AParentMenu := nil;
-      for J := 0 to ICount - 1 do//只取到倒数第二个数据, 因为最后一个数据是路径.
+      for J := 0 to ICount - 1 do// 因为最后一个数据包含路径.
       begin
-//        DataFJ(FList[J], '$');
         DivideData(FList2, FList[J], '$');
         if pos('----', FList2[0]) > 0 then //认为是分隔线, 产生新菜单
         begin
@@ -263,15 +368,16 @@ begin
           end;
         end;
         //如果没有菜单,则新建一个
-        if AItem = nil then
+        IsNewItem := AItem = nil;
+        if IsNewItem then
         begin
           IsNewItem := True;
           AItem := TMenuItem.Create(Self);
           AItem.Caption := FList2[0];
           AItem.Name := 'menu' + inttostr(I) + 'm' + inttostr(J);
+          //
           if Flist2.Count > 1 then
           begin
-
             AItem.Hint := FList2[1];
           //加载EXE图标
             ITBCount := ExtractIcon(HInstance, PChar(FList2[1]), $FFFFFFFF);
@@ -285,22 +391,23 @@ begin
           end;
 
           AItem.OnClick := AOpenDirExecute;
-        end
-        else
-        begin
-          IsNewItem := False;
         end;
+
         //1级菜单
         if AParentMenu = nil then
         begin
           if IsNewItem then
+          begin
             PmLm.Items.Add(AItem);
+          end;
         end;
         //下级菜单
         if AParentMenu <> nil then
         begin
           if IsNewItem then
+          begin
             AParentMenu.Add(AItem);
+          end;
         end;
         AParentMenu := AItem;
       end;
@@ -311,6 +418,143 @@ begin
     FList.Clear;
     FList2.Clear;
     ICO.Free;
+  end;
+  Result := True;
+end;
+
+function TFormWelcome.ReadIniToTreeview: Boolean;
+var
+  AiniFile: TiniFile;
+  I, J, K: Integer;
+  S: string;
+  AIdent: string;
+  ICount: Integer;
+  AParentNode: TTreeNode;
+  Anode: TTreeNode;
+  IsNewItem: Boolean;
+
+  function findNode(FNode: TTreeNode; AValue: string; BFirst: Boolean = false): TTreeNode;
+  var
+    Node: TTreenode;
+  begin
+    Result := nil;
+    if FNode = nil then
+    begin
+      Result := nil;
+      Exit;
+    end;
+    Node := FNode;
+    while Node <> nil do
+    begin
+      if Node.Text = AValue then
+      begin
+        if BFirst then
+        begin
+          if Node.Parent = nil then
+          begin
+            Result := Node;
+            Exit;
+          end;
+
+        end
+        else
+        begin
+          Result := Node;
+          Exit;
+        end;
+      end;
+      Node := Node.GetNext;
+    end;
+
+  end;
+
+begin
+  Result := False;
+  AiniFile := TiniFile.Create(Configini);
+  FList := TStringList.Create;
+  FList2 := TStringList.Create;
+  TvConfig.items.Clear;
+  try
+    if not FileExists(AiniFile.FileName) then
+    begin
+      AERROR := '在' + AiniFile.FileName + '下不存在该文件,请该文件放在该目录下!';
+      ShowMessage(Aerror);
+      Exit;
+    end;
+    //开始读取配置文件
+    for I := 0 to IMenueMax do
+    begin
+      AIdent := menuIdent + inttostr(I);
+      S := Trim(AiniFile.ReadString(CSection, AIdent, ''));
+      if S = '' then
+        Continue;
+      FList.Clear;
+      DivideData(FList, S, '|');
+      ICount := FList.Count;
+      AParentNode := nil;
+      for J := 0 to ICount - 1 do// 因为最后一个数据包含路径.
+      begin
+        DivideData(FList2, FList[J], '$');
+        if pos('----', FList2[0]) > 0 then //认为是分隔线, 产生新菜单
+        begin
+          Anode := nil;
+        end
+        else
+        begin
+//        先查询是否有该菜单
+          if AParentNode = nil then
+          begin
+            Anode := findNode(tvconfig.Items.GetFirstNode, FList2[0], true);
+          end
+          else
+          begin
+            Anode := findNode(AParentNode.getFirstChild, FList2[0]);
+          end;
+        end;
+        //如果没有菜单,则新建一个
+        IsNewItem := Anode = nil;
+        if IsNewItem then
+        begin
+          if AParentNode = nil then
+          begin
+            Anode := tvConfig.Items.Add(Anode, Flist2[0]);
+          end
+          else
+          begin
+            Anode := tvconfig.Items.AddChild(AParentNode, Flist2[0]);
+          end;
+          if Flist2.Count > 1 then
+          begin
+            Anode.Data := New(PDir);
+            PDir(Anode.Data)^.CDir := Flist2[1];
+          end;
+
+        end;
+
+        //1级菜单
+//        if AParentMenu = nil then
+//        begin
+//          if IsNewItem then
+//          begin
+//            PmLm.Items.Add(AItem);
+//          end;
+//        end;
+//        //下级菜单
+//        if AParentMenu <> nil then
+//        begin
+//          if IsNewItem then
+//          begin
+//            AParentMenu.Add(AItem);
+//          end;
+//        end;
+        AParentNode := Anode;
+      end;
+
+    end;
+  finally
+    AiniFile.Free;
+    FList.Clear;
+    FList2.Clear;
   end;
   Result := True;
 end;
@@ -333,6 +577,90 @@ begin
     end;
     I1 := pos('[', Result);
   until I1 <= 0
+end;
+
+procedure TFormWelcome.tvConfigChange(Sender: TObject; Node: TTreeNode);
+begin
+  if Node.Data <> nil then
+  begin
+    EdtDir.Text := PDir(Node.Data)^.CDir;
+  end
+  else
+  begin
+    edtdir.Clear;
+  end;
+  //检查是否有子节点
+  if Node.Count > 0 then
+  begin
+    pnlWrite.Enabled := false;
+  end
+  else
+  begin
+    pnlWrite.Enabled := true;
+  end;
+
+end;
+
+procedure TFormWelcome.btnConfigClick(Sender: TObject);
+begin
+  if not OpenAdd.Execute then
+    exit;
+  edtDir.Text := OpenAdd.FileName;
+end;
+
+procedure TFormWelcome.btnSaveConfigClick(Sender: TObject);
+var
+  AiniFile: Tinifile;
+  IMenueCount: Integer;
+  I: Integer;
+  Aident: string;
+  ANode: TTreeNode;
+  Value: string;
+  AParentNode: TTreeNode;
+begin
+  IMenueCount := Tvconfig.Items.Count;
+  AiniFile := TiniFile.Create(Configini);
+  try
+    for I := 0 to IMenueCount - 1 do
+    begin
+      Aident := menuIdent + inttostr(I);
+      ANode := tvconfig.Items[I];
+      if ANode.Count = 0 then
+      begin
+        Value := '';
+        if ANode.data <> nil then
+        begin
+          Value := Value + '$' + PDir(ANode.Data)^.CDir
+        end;
+        Value := ANode.Text + Value;
+        //
+        AParentNode := ANode.Parent;
+        while AParentNode <> nil do
+        begin
+          Value := AParentNode.Text + '|' + Value;
+          AParentNode := AParentNode.Parent;
+        end;
+        AiniFile.WriteString(CSection, Aident, Value);
+      end
+      else
+      begin
+        AiniFile.WriteString(CSection, Aident, '');
+
+      end;
+
+    end;
+    for I := IMenueCount to IMenueMax do
+    begin
+      Aident := menuIdent + inttostr(I);
+      AiniFile.WriteString(CSection, Aident, '');
+    end;
+  finally
+    AiniFile.Free;
+  end;
+  Readini;
+  ReadiniTotreeview;
+  formWelcome.close;
+
 end;
 
 end.
