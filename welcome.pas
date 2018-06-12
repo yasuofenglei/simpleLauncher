@@ -37,7 +37,6 @@ type
     actOpen: TAction;
     tvConfig: TTreeView;
     pnl1: TPanel;
-    btn1: TButton;
     btnSaveConfig: TButton;
     OpenAdd: TOpenDialog;
     pnlWrite: TPanel;
@@ -60,7 +59,6 @@ type
     procedure actConfigExecute(Sender: TObject);
     procedure actRefreshExecute(Sender: TObject);
     procedure actOpenExecute(Sender: TObject);
-    procedure btn1Click(Sender: TObject);
     procedure tvConfigChange(Sender: TObject; Node: TTreeNode);
     procedure btnConfigClick(Sender: TObject);
     procedure btn2Click(Sender: TObject);
@@ -141,10 +139,10 @@ end;
 
 procedure TFormWelcome.actDeleteExecute(Sender: TObject);
 var
-  CMsg:string;
+  CMsg: string;
 begin
-  Cmsg:='确认要删除['+tvConfig.Selected.Text+']?';
-  if Application.MessageBox(PChar(Cmsg), '', MB_YESNO + MB_ICONQUESTION) = IDNO then
+  CMsg := '确认要删除[' + tvConfig.Selected.Text + ']?';
+  if Application.MessageBox(PChar(CMsg), '', MB_YESNO + MB_ICONQUESTION) = IDNO then
   begin
     exit;
   end;
@@ -204,11 +202,6 @@ begin
   ShellExecute(Handle, 'open', 'Explorer.exe', PChar(Dir), nil, 1);
 end;
 
-procedure TFormWelcome.btn1Click(Sender: TObject);
-begin
-  ReadIniToTreeview;
-end;
-
 procedure TFormWelcome.btn2Click(Sender: TObject);
 var
   Dir: string;
@@ -251,7 +244,7 @@ begin
   ntida.uFlags := nif_icon + nif_tip + nif_message; //指定在该结构中uCallbackMessage、hIcon和szTip参数都有效
   ntida.uCallbackMessage := mousemsg; //指定的窗口消息
   ntida.hIcon := Application.Icon.handle; //指定系统状态栏显示应用程序的图标句柄
-  ntida.szTip := 'easyLanucher!'; //当鼠标停留在系统状态栏该图标上时，出现该提示信息
+  ntida.szTip := 'simpleLauncher'; //当鼠标停留在系统状态栏该图标上时，出现该提示信息
   shell_notifyicona(NIM_ADD, @ntida);  //在系统状态栏增加一个新图标
 
   Readini;
@@ -333,7 +326,7 @@ begin
   try
     if not FileExists(AiniFile.FileName) then
     begin
-      AERROR := '在' + AiniFile.FileName + '下不存在该文件,请该文件放在该目录下!';
+      AERROR := '在目录下不存在' + AiniFile.FileName + ' ,请将该文件放该目录下!';
       ShowMessage(Aerror);
       Exit;
     end;
@@ -386,6 +379,22 @@ begin
               ICO.Handle := ExtractIcon(HInstance, PChar(FList2[1]), 0);
               ilmenu.AddIcon(ICO);
               AItem.ImageIndex := ilmenu.Count - 1;
+            end
+            else
+            begin
+              if Pos('.exe', Flist2[1]) > 0 then
+              begin
+                AItem.ImageIndex := 2;
+
+              end
+              else if (Pos('http://', Flist2[1]) > 0) or (Pos('https://', Flist2[1]) > 0) then
+              begin
+                AItem.ImageIndex := 1;
+              end
+              else
+              begin
+                AItem.ImageIndex := 0;
+              end;
 
             end;
           end;
@@ -618,6 +627,7 @@ var
   Value: string;
   AParentNode: TTreeNode;
 begin
+
   IMenueCount := Tvconfig.Items.Count;
   AiniFile := TiniFile.Create(Configini);
   try
