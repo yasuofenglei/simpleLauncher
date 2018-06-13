@@ -21,9 +21,10 @@ begin
   leavingsValue := Value;
   while pos(Divide, leavingsValue) > 0 do
   begin
-    IIndex := pos(Divide, Value);
+    IIndex := pos(Divide, leavingsValue);
     CurrValue := Copy(leavingsValue, 1, IIndex - 1);
     leavingsValue := Copy(leavingsValue, IIndex + 1, length(leavingsValue) - IIndex);
+    showmessage(currvalue+slinebreak+leavingsvalue);
     AList.Add(CurrValue);
 
   end;

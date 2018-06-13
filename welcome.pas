@@ -662,7 +662,8 @@ begin
     for I := IMenueCount to IMenueMax do
     begin
       Aident := menuIdent + inttostr(I);
-      AiniFile.WriteString(CSection, Aident, '');
+//      AiniFile.WriteString(CSection, Aident, '');
+      AiniFile.DeleteKey(CSection,Aident);
     end;
   finally
     AiniFile.Free;
