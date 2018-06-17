@@ -53,12 +53,13 @@ type
     actModify: TAction;
     mniModify: TMenuItem;
     btnSaveConfig: TButton;
-    tvConfig: TTreeView;
     lbl1: TLabel;
     mmMain: TMainMenu;
     mniN1: TMenuItem;
     mniN2: TMenuItem;
     actInfo: TAction;
+    pnl2: TPanel;
+    tvConfig: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormPaint(Sender: TObject);

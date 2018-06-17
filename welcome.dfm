@@ -2139,7 +2139,8 @@ object FormWelcome: TFormWelcome
     Height = 423
     Align = alClient
     TabOrder = 0
-    ExplicitHeight = 403
+    ExplicitLeft = -8
+    ExplicitTop = 8
     object pnlWrite: TPanel
       Left = 1
       Top = 332
@@ -2147,7 +2148,8 @@ object FormWelcome: TFormWelcome
       Height = 90
       Align = alBottom
       TabOrder = 0
-      ExplicitTop = 312
+      ExplicitLeft = 41
+      ExplicitTop = 346
       object lbl1: TLabel
         Left = 1
         Top = 1
@@ -2198,23 +2200,37 @@ object FormWelcome: TFormWelcome
         OnClick = btnSaveConfigClick
       end
     end
-    object tvConfig: TTreeView
+    object pnl2: TPanel
       Left = 1
       Top = 1
-      Width = 703
+      Width = 701
       Height = 331
-      Align = alLeft
-      Indent = 19
-      PopupMenu = pmtv
+      Align = alClient
+      Caption = 'pnl2'
       TabOrder = 1
-      OnChange = tvConfigChange
-      OnDragDrop = tvConfigDragDrop
-      OnDragOver = tvConfigDragOver
-      OnMouseDown = tvConfigMouseDown
-      Items.NodeData = {
-        03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-        00000000000100}
-      ExplicitHeight = 335
+      ExplicitLeft = 88
+      ExplicitTop = 152
+      ExplicitWidth = 185
+      ExplicitHeight = 41
+      object tvConfig: TTreeView
+        Left = 1
+        Top = 1
+        Width = 699
+        Height = 329
+        Align = alClient
+        Indent = 19
+        PopupMenu = pmtv
+        TabOrder = 0
+        OnChange = tvConfigChange
+        OnDragDrop = tvConfigDragDrop
+        OnDragOver = tvConfigDragOver
+        OnMouseDown = tvConfigMouseDown
+        Items.NodeData = {
+          03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+          00000000000100}
+        ExplicitLeft = 96
+        ExplicitWidth = 604
+      end
     end
   end
   object alMain: TActionList
