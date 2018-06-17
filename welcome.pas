@@ -60,6 +60,8 @@ type
     actInfo: TAction;
     pnl2: TPanel;
     tvConfig: TTreeView;
+    actGetCode: TAction;
+    mniGetCode: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormPaint(Sender: TObject);
@@ -80,6 +82,7 @@ type
     procedure tvConfigMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure tvConfigDragDrop(Sender, Source: TObject; X, Y: Integer);
     procedure actInfoExecute(Sender: TObject);
+    procedure actGetCodeExecute(Sender: TObject);
   private
     FList: TStrings;
     FList2: TStrings;
@@ -180,6 +183,11 @@ begin
 
 end;
 
+procedure TFormWelcome.actGetCodeExecute(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', 'Explorer.exe', 'https://github.com/yasuofenglei/simpleLauncher', nil, 1);
+end;
+
 procedure TFormWelcome.actInfoExecute(Sender: TObject);
 var
   MessageStr: string;
@@ -215,7 +223,7 @@ begin
   MessageStr := simpleLauncher //
     + slinebreak + getVer;
   Application.MessageBox(Pchar(MessageStr), '', MB_OK + MB_ICONINFORMATION);
- 
+
 end;
 
 procedure TFormWelcome.actModifyExecute(Sender: TObject);

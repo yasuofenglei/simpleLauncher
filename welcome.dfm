@@ -2282,6 +2282,11 @@ object FormWelcome: TFormWelcome
       Caption = 'actInfo'
       OnExecute = actInfoExecute
     end
+    object actGetCode: TAction
+      Category = 'mainMenu'
+      Caption = 'actGetCode'
+      OnExecute = actGetCodeExecute
+    end
   end
   object pmlm: TPopupMenu
     Images = ilmenu
@@ -2493,6 +2498,11 @@ object FormWelcome: TFormWelcome
       Caption = #24110#21161
       SubMenuImages = DataModule1.ilMain
       ImageIndex = 0
+      object mniGetCode: TMenuItem
+        Action = actGetCode
+        Caption = #20174'gitHub'#33719#21462#28304#30721
+        ImageIndex = 24
+      end
       object mniN2: TMenuItem
         Action = actInfo
         Caption = #20851#20110
