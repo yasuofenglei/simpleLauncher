@@ -2,7 +2,7 @@ object FormWelcome: TFormWelcome
   Left = 0
   Top = 0
   Caption = 'simpleLauncher'
-  ClientHeight = 403
+  ClientHeight = 423
   ClientWidth = 703
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -2125,52 +2125,43 @@ object FormWelcome: TFormWelcome
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+  Menu = mmMain
   OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
   OnPaint = FormPaint
   PixelsPerInch = 96
   TextHeight = 13
-  object tvConfig: TTreeView
+  object pnl1: TPanel
     Left = 0
     Top = 0
-    Width = 241
-    Height = 403
-    Align = alLeft
-    Indent = 19
-    PopupMenu = pmtv
-    TabOrder = 0
-    OnChange = tvConfigChange
-    Items.NodeData = {
-      03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-      00000000000100}
-  end
-  object pnl1: TPanel
-    Left = 241
-    Top = 0
-    Width = 462
-    Height = 403
+    Width = 703
+    Height = 423
     Align = alClient
-    TabOrder = 1
-    object btnSaveConfig: TButton
-      Left = 366
-      Top = 360
-      Width = 75
-      Height = 25
-      Caption = #20445#23384#37197#32622
-      TabOrder = 0
-      OnClick = btnSaveConfigClick
-    end
+    TabOrder = 0
+    ExplicitHeight = 403
     object pnlWrite: TPanel
       Left = 1
-      Top = 1
-      Width = 460
-      Height = 112
-      Align = alTop
-      TabOrder = 1
+      Top = 332
+      Width = 701
+      Height = 90
+      Align = alBottom
+      TabOrder = 0
+      ExplicitTop = 312
+      object lbl1: TLabel
+        Left = 1
+        Top = 1
+        Width = 699
+        Height = 13
+        Align = alTop
+        Caption = #36873#20013#19968#20010#26411#23614#33410#28857#21518#65292#22312#19979#26041#36755#20837#35201#25171#24320#30340#31243#24207#36335#24452#12289#21487#25191#34892#25991#20214#25110#32593#22336#31561
+        ExplicitLeft = 328
+        ExplicitTop = 8
+        ExplicitWidth = 396
+      end
       object btnConfig: TButton
-        Left = 14
-        Top = 68
+        Left = 12
+        Top = 49
         Width = 100
         Height = 25
         Caption = #36873#25321#21487#25191#34892#25991#20214
@@ -2179,7 +2170,7 @@ object FormWelcome: TFormWelcome
       end
       object btn2: TButton
         Left = 118
-        Top = 68
+        Top = 49
         Width = 100
         Height = 25
         Caption = #36873#25321#30446#24405
@@ -2187,18 +2178,49 @@ object FormWelcome: TFormWelcome
         OnClick = btn2Click
       end
       object EdtDir: TEdit
-        Left = 5
-        Top = 20
-        Width = 412
+        Left = 1
+        Top = 14
+        Width = 699
         Height = 21
+        Align = alTop
         TabOrder = 2
         OnChange = EdtDirChange
+        ExplicitLeft = 0
+        ExplicitTop = 22
       end
+      object btnSaveConfig: TButton
+        Left = 598
+        Top = 49
+        Width = 75
+        Height = 25
+        Caption = #20445#23384#37197#32622
+        TabOrder = 3
+        OnClick = btnSaveConfigClick
+      end
+    end
+    object tvConfig: TTreeView
+      Left = 1
+      Top = 1
+      Width = 703
+      Height = 331
+      Align = alLeft
+      Indent = 19
+      PopupMenu = pmtv
+      TabOrder = 1
+      OnChange = tvConfigChange
+      OnDragDrop = tvConfigDragDrop
+      OnDragOver = tvConfigDragOver
+      OnMouseDown = tvConfigMouseDown
+      Items.NodeData = {
+        03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+        00000000000100}
+      ExplicitHeight = 335
     end
   end
   object alMain: TActionList
-    Left = 232
-    Top = 8
+    Images = DataModule1.ilMain
+    Left = 248
+    Top = 24
     object actExit: TAction
       Category = 'rightMenu'
       Caption = 'actExit'
@@ -2239,16 +2261,21 @@ object FormWelcome: TFormWelcome
       Caption = 'actModify'
       OnExecute = actModifyExecute
     end
+    object actInfo: TAction
+      Category = 'mainMenu'
+      Caption = 'actInfo'
+      OnExecute = actInfoExecute
+    end
   end
   object pmlm: TPopupMenu
     Images = ilmenu
-    Left = 40
-    Top = 336
+    Left = 32
+    Top = 248
   end
   object pmrm: TPopupMenu
     Images = DataModule1.ilMain
     Left = 80
-    Top = 336
+    Top = 264
     object mniConfig: TMenuItem
       Action = actConfig
       Caption = #37197#32622
@@ -2274,7 +2301,7 @@ object FormWelcome: TFormWelcome
     Left = 296
     Top = 8
     Bitmap = {
-      494C0101030008001C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000FF0000
       00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
@@ -2440,6 +2467,22 @@ object FormWelcome: TFormWelcome
       Action = actDelete
       Caption = #21024#38500
       ImageIndex = 8
+    end
+  end
+  object mmMain: TMainMenu
+    Images = DataModule1.ilMain
+    Left = 48
+    Top = 8
+    object mniN1: TMenuItem
+      Caption = #24110#21161
+      SubMenuImages = DataModule1.ilMain
+      ImageIndex = 0
+      object mniN2: TMenuItem
+        Action = actInfo
+        Caption = #20851#20110
+        SubMenuImages = DataModule1.ilMain
+        ImageIndex = 22
+      end
     end
   end
 end

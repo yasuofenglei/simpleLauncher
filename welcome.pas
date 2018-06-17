@@ -14,6 +14,8 @@ const
   CSection: string = 'DIR';
   IMenueMax: Integer = 1000;
   menuIdent: string = 'menu';
+  //Alpha（α）、Beta（β）和Gamma（γ）
+  simpleLauncher = 'simpleLauncher Alpha';
 
 type
   PDir = ^RDir;
@@ -35,9 +37,7 @@ type
     mniRefresh: TMenuItem;
     mniOpen: TMenuItem;
     actOpen: TAction;
-    tvConfig: TTreeView;
     pnl1: TPanel;
-    btnSaveConfig: TButton;
     OpenAdd: TOpenDialog;
     pnlWrite: TPanel;
     btnConfig: TButton;
@@ -52,6 +52,13 @@ type
     mniaddChild: TMenuItem;
     actModify: TAction;
     mniModify: TMenuItem;
+    btnSaveConfig: TButton;
+    tvConfig: TTreeView;
+    lbl1: TLabel;
+    mmMain: TMainMenu;
+    mniN1: TMenuItem;
+    mniN2: TMenuItem;
+    actInfo: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormPaint(Sender: TObject);
@@ -68,6 +75,10 @@ type
     procedure actDeleteExecute(Sender: TObject);
     procedure actaddChildExecute(Sender: TObject);
     procedure actModifyExecute(Sender: TObject);
+    procedure tvConfigDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+    procedure tvConfigMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure tvConfigDragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure actInfoExecute(Sender: TObject);
   private
     FList: TStrings;
     FList2: TStrings;
@@ -168,6 +179,44 @@ begin
 
 end;
 
+procedure TFormWelcome.actInfoExecute(Sender: TObject);
+var
+  MessageStr: string;
+
+  function getVer: string;
+  var
+    FileName: string;
+    InfoSize, Wnd: DWORD;
+    VerBuf: Pointer;
+    VerInfo: ^VS_FIXEDFILEINFO;
+  begin
+    Result := '0.0.0.0';
+    FileName := Application.ExeName;
+    InfoSize := GetFileVersionInfoSize(PChar(FileName), Wnd);
+    if InfoSize <> 0 then
+    begin
+      GetMem(VerBuf, InfoSize);
+      try
+        if GetFileVersionInfo(PChar(FileName), Wnd, InfoSize, VerBuf) then
+        begin
+          VerInfo := nil;
+          VerQueryValue(VerBuf, '\', Pointer(VerInfo), Wnd);
+          if VerInfo <> nil then
+            Result := Format('%d.%d.%d.%d', [VerInfo^.dwFileVersionMS shr 16, VerInfo^.dwFileVersionMS and $0000ffff, VerInfo^.dwFileVersionLS shr 16, VerInfo^.dwFileVersionLS and $0000ffff]);
+        end;
+      finally
+        FreeMem(VerBuf, InfoSize);
+      end;
+    end;
+  end;
+
+begin
+  MessageStr := simpleLauncher //
+    + slinebreak + getVer;
+  Application.MessageBox(Pchar(MessageStr), '', MB_OK + MB_ICONINFORMATION);
+ 
+end;
+
 procedure TFormWelcome.actModifyExecute(Sender: TObject);
 var
   Value: string;
@@ -188,6 +237,8 @@ end;
 procedure TFormWelcome.actRefreshExecute(Sender: TObject);
 begin
   if not ReadIni then
+    Exit;
+  if not ReadIniToTreeview then
     Exit;
 end;
 
@@ -244,7 +295,7 @@ begin
   ntida.uFlags := nif_icon + nif_tip + nif_message; //指定在该结构中uCallbackMessage、hIcon和szTip参数都有效
   ntida.uCallbackMessage := mousemsg; //指定的窗口消息
   ntida.hIcon := Application.Icon.handle; //指定系统状态栏显示应用程序的图标句柄
-  ntida.szTip := 'simpleLauncher'; //当鼠标停留在系统状态栏该图标上时，出现该提示信息
+  ntida.szTip := simpleLauncher; //当鼠标停留在系统状态栏该图标上时，出现该提示信息
   shell_notifyicona(NIM_ADD, @ntida);  //在系统状态栏增加一个新图标
 
   Readini;
@@ -610,6 +661,42 @@ begin
 
 end;
 
+procedure TFormWelcome.tvConfigDragDrop(Sender, Source: TObject; X, Y: Integer);
+var
+  node: TTreeNode;
+begin
+  node := tvConfig.GetNodeAt(X, Y);
+  if node <> nil then
+  begin
+    tvConfig.Selected.MoveTo(node, naAddChild);
+     // 将节点移动到目标节点的下一级，也就是使目标节点成为被拖动节点的父节点
+    tvConfig.EndDrag(True);
+  end
+  else
+  begin
+    tvConfig.Selected.MoveTo(node, naAdd);
+    tvConfig.EndDrag(false);
+    //
+//  TNodeAttachMode = (naAdd, naAddFirst, naAddChild, naAddChildFirst, naInsert);
+  end;
+end;
+
+procedure TFormWelcome.tvConfigDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+  if Source <> nil then
+    Accept := True;
+end;
+
+procedure TFormWelcome.tvConfigMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  node: TTreeNode;
+begin
+  node := tvConfig.GetNodeAt(X, Y);  // 获取鼠标按下位置的节点
+//  if (node <> nil) and (node.Level > 0) and (Button = mbLeft) then
+  if node <> nil then
+    tvConfig.BeginDrag(False);  // 启动拖动
+end;
+
 procedure TFormWelcome.btnConfigClick(Sender: TObject);
 begin
   if not OpenAdd.Execute then
@@ -663,7 +750,7 @@ begin
     begin
       Aident := menuIdent + inttostr(I);
 //      AiniFile.WriteString(CSection, Aident, '');
-      AiniFile.DeleteKey(CSection,Aident);
+      AiniFile.DeleteKey(CSection, Aident);
     end;
   finally
     AiniFile.Free;

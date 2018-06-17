@@ -24,7 +24,6 @@ begin
     IIndex := pos(Divide, leavingsValue);
     CurrValue := Copy(leavingsValue, 1, IIndex - 1);
     leavingsValue := Copy(leavingsValue, IIndex + 1, length(leavingsValue) - IIndex);
-    showmessage(currvalue+slinebreak+leavingsvalue);
     AList.Add(CurrValue);
 
   end;
