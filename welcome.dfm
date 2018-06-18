@@ -2,7 +2,7 @@ object FormWelcome: TFormWelcome
   Left = 0
   Top = 0
   Caption = 'simpleLauncher'
-  ClientHeight = 423
+  ClientHeight = 403
   ClientWidth = 703
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -2136,20 +2136,16 @@ object FormWelcome: TFormWelcome
     Left = 0
     Top = 0
     Width = 703
-    Height = 423
+    Height = 403
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = -8
-    ExplicitTop = 8
     object pnlWrite: TPanel
       Left = 1
-      Top = 332
+      Top = 312
       Width = 701
       Height = 90
       Align = alBottom
       TabOrder = 0
-      ExplicitLeft = 41
-      ExplicitTop = 346
       object lbl1: TLabel
         Left = 1
         Top = 1
@@ -2157,8 +2153,6 @@ object FormWelcome: TFormWelcome
         Height = 13
         Align = alTop
         Caption = #36873#20013#19968#20010#26411#23614#33410#28857#21518#65292#22312#19979#26041#36755#20837#35201#25171#24320#30340#31243#24207#36335#24452#12289#21487#25191#34892#25991#20214#25110#32593#22336#31561
-        ExplicitLeft = 328
-        ExplicitTop = 8
         ExplicitWidth = 396
       end
       object btnConfig: TButton
@@ -2187,8 +2181,6 @@ object FormWelcome: TFormWelcome
         Align = alTop
         TabOrder = 2
         OnChange = EdtDirChange
-        ExplicitLeft = 0
-        ExplicitTop = 22
       end
       object btnSaveConfig: TButton
         Left = 598
@@ -2204,19 +2196,15 @@ object FormWelcome: TFormWelcome
       Left = 1
       Top = 1
       Width = 701
-      Height = 331
+      Height = 311
       Align = alClient
       Caption = 'pnl2'
       TabOrder = 1
-      ExplicitLeft = 88
-      ExplicitTop = 152
-      ExplicitWidth = 185
-      ExplicitHeight = 41
       object tvConfig: TTreeView
         Left = 1
         Top = 1
         Width = 699
-        Height = 329
+        Height = 309
         Align = alClient
         Indent = 19
         PopupMenu = pmtv
@@ -2228,8 +2216,6 @@ object FormWelcome: TFormWelcome
         Items.NodeData = {
           03010000001E0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
           00000000000100}
-        ExplicitLeft = 96
-        ExplicitWidth = 604
       end
     end
   end
@@ -2322,7 +2308,7 @@ object FormWelcome: TFormWelcome
     Left = 296
     Top = 8
     Bitmap = {
-      494C010103000800240010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000800280010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000FF0000
       00FF000000FF000000FF000000FF000000FF000000FF000000FF000000FF0000
@@ -2491,7 +2477,9 @@ object FormWelcome: TFormWelcome
     end
   end
   object mmMain: TMainMenu
+    BiDiMode = bdRightToLeft
     Images = DataModule1.ilMain
+    ParentBiDiMode = False
     Left = 48
     Top = 8
     object mniN1: TMenuItem
