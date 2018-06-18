@@ -5,15 +5,16 @@
     <Transaction>2016/02/13 03:24:08.000.914,=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2018/02/11 20:26:52.000.064,=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2018/06/09 19:09:07.000.545,=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2018/06/09 19:11:38.000.868,C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.dfm=D:\Developer\Workspaces\d10\easyLauncher\welcome.dfm</Transaction>
-    <Transaction>2018/06/09 19:11:38.000.868,C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\Developer\Workspaces\d10\easyLauncher\welcome.pas</Transaction>
-    <Transaction>2018/06/09 20:03:04.000.494,C:\Users\磊\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Developer\Workspaces\d10\easyLauncher\easylauncher.dproj</Transaction>
+    <Transaction>2018/06/09 19:11:38.000.868,D:\Developer\Workspaces\d10\easyLauncher\welcome.dfm=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2018/06/09 19:11:38.000.868,D:\Developer\Workspaces\d10\easyLauncher\welcome.pas=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2018/06/09 20:03:04.000.494,D:\Developer\Workspaces\d10\easyLauncher\easylauncher.dproj=C:\Users\磊\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>2018/06/09 20:28:54.000.565,=D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas</Transaction>
-    <Transaction>2018/06/09 20:29:13.000.119,D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas=D:\Developer\Workspaces\d10\easyLauncher\uFunction.pas</Transaction>
+    <Transaction>2018/06/09 20:29:13.000.119,D:\Developer\Workspaces\d10\easyLauncher\uFunction.pas=D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas</Transaction>
     <Transaction>2018/06/09 21:33:12.000.316,=D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas</Transaction>
-    <Transaction>2018/06/09 21:33:26.000.416,D:\Developer\Workspaces\d10\easyLauncher\Unit1.dfm=D:\Developer\Workspaces\d10\easyLauncher\uData.dfm</Transaction>
-    <Transaction>2018/06/09 21:33:26.000.416,D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas=D:\Developer\Workspaces\d10\easyLauncher\uData.pas</Transaction>
-    <Transaction>2018/06/09 22:23:23.000.957,D:\Developer\Workspaces\d10\easyLauncher\easylauncher.dproj=D:\Developer\Workspaces\d10\easyLauncher\simpleLauncher.dproj</Transaction>
+    <Transaction>2018/06/09 21:33:26.000.416,D:\Developer\Workspaces\d10\easyLauncher\uData.pas=D:\Developer\Workspaces\d10\easyLauncher\Unit1.pas</Transaction>
+    <Transaction>2018/06/09 21:33:26.000.416,D:\Developer\Workspaces\d10\easyLauncher\uData.dfm=D:\Developer\Workspaces\d10\easyLauncher\Unit1.dfm</Transaction>
+    <Transaction>2018/06/09 22:23:23.000.957,D:\Developer\Workspaces\d10\easyLauncher\simpleLauncher.dproj=D:\Developer\Workspaces\d10\easyLauncher\easylauncher.dproj</Transaction>
+    <Transaction>2018/06/17 16:56:59.048,=D:\Developer\Workspaces\d10\simpleLauncher\Unit1.pas</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
 		<NoProfile iOSSimulator="iPhone5"/>
